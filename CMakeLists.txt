@@ -22,6 +22,9 @@ set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/lib)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/output/bin)
 set(FILE_INDEX 0)
 
 find_package(xclang REQUIRED CONFIG)
@@ -32,5 +35,8 @@ foreach(FILE ${SOURCES})
     cmake_path(GET FILE STEM LAST_ONLY FILE_WITHOUT_EXT)
     add_executable("file${FILE_INDEX}" ${FILE})
     target_link_libraries("file${FILE_INDEX}" PRIVATE xclang::std)
+    set_target_properties("file${FILE_INDEX}" PROPERTIES
+        OUTPUT_NAME "${FILE_WITHOUT_EXT}"
+    )
     math(EXPR FILE_INDEX "${FILE_INDEX} + 1")
 endforeach()
